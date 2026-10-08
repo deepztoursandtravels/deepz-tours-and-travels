@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DEEPZ Admin Login</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #07152b;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .login-box {
+      width: 90%;
+      max-width: 400px;
+      background: #0d2342;
+      padding: 30px;
+      border-radius: 16px;
+      box-sizing: border-box;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #bbb;
+      margin-bottom: 25px;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      margin: 8px 0;
+      box-sizing: border-box;
+      border-radius: 8px;
+      border: 1px solid #555;
+      background: #07152b;
+      color: white;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      margin-top: 15px;
+      border: 0;
+      border-radius: 8px;
+      background: #d4af37;
+      color: #07152b;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    #message {
+      text-align: center;
+      margin-top: 15px;
+      color: #ffcc66;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="login-box">
+    <h1>DEEPZ Admin</h1>
+    <div class="subtitle">Secure Admin Login</div>
+
+    <input type="email" id="email" placeholder="Admin Email">
+    <input type="password" id="password" placeholder="Password">
+
+    <button onclick="login()">Login</button>
+
+    <div id="message"></div>
+  </div>
+
+  <script>
+    const SUPABASE_URL ="https://sbnyvlpsbxfyphmtxpor.supabase.co";
+    const SUPABASE_KEY ="sb_publishable_FYHEtuDDiFFDejg7vKunqw_JhL17yTR";
+
+    const supabaseClient = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+    async function login() {
+      const email = document.getElementById("email").value.trim();
+      const password = documentgetElementById("password").value
+",",
+      const message = document.getElementById("message");
+
+      if (!email || !password) {
+        message.textContent = "Please enter email and password.";
+        return;
+      }
+
+      message.textContent = "Logging in...";
+
+      const { error } = await supabaseClient.auth.signInWithPassword({
+        email: email,
+        password: password
+      });
+
+      if (error) {
+        message.textContent = error.message;
+        return;
+      }
+
+      window.location.href = "admin.html";
+    }
+  </script>
+
+</body>
+</html>
