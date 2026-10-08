@@ -8,6 +8,10 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
@@ -17,56 +21,93 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      padding: 20px;
     }
 
     .login-box {
-      width: 90%;
-      max-width: 400px;
-      background: #0d2342;
-      padding: 30px;
-      border-radius: 16px;
-      box-sizing: border-box;
+      width: 100%;
+      max-width: 620px;
+      background: #082d50;
+      border-radius: 28px;
+      padding: 70px 58px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
     }
 
     h1 {
-      text-align: center;
-      margin-bottom: 8px;
+      margin: 0;
+      font-size: 62px;
+      font-weight: 700;
     }
 
     .subtitle {
-      text-align: center;
-      color: #bbb;
-      margin-bottom: 25px;
+      margin: 20px 0 65px;
+      font-size: 30px;
+      color: #bfc5ce;
     }
 
     input {
       width: 100%;
-      padding: 14px;
-      margin: 8px 0;
-      box-sizing: border-box;
-      border-radius: 8px;
-      border: 1px solid #555;
-      background: #07152b;
+      padding: 25px;
+      margin-bottom: 28px;
+      border-radius: 15px;
+      border: 2px solid #68727d;
+      background: #071b31;
       color: white;
-      font-size: 16px;
+      font-size: 25px;
+      outline: none;
+    }
+
+    input::placeholder {
+      color: #89919c;
     }
 
     button {
       width: 100%;
-      padding: 14px;
-      margin-top: 15px;
-      border: 0;
-      border-radius: 8px;
-      background: #d4af37;
-      color: #07152b;
+      padding: 25px;
+      border: none;
+      border-radius: 15px;
+      background: #f0bf00;
+      color: #111;
+      font-size: 27px;
       font-weight: bold;
-      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      opacity: 0.6;
     }
 
     #message {
-      text-align: center;
-      margin-top: 15px;
-      color: #ffcc66;
+      margin-top: 25px;
+      font-size: 20px;
+      color: #ffb3b3;
+      min-height: 25px;
+    }
+
+    @media (max-width: 600px) {
+      .login-box {
+        padding: 55px 30px;
+      }
+
+      h1 {
+        font-size: 48px;
+      }
+
+      .subtitle {
+        font-size: 25px;
+        margin-bottom: 50px;
+      }
+
+      input {
+        font-size: 20px;
+        padding: 20px;
+      }
+
+      button {
+        font-size: 23px;
+        padding: 21px;
+      }
     }
   </style>
 </head>
@@ -75,19 +116,36 @@
 
   <div class="login-box">
     <h1>DEEPZ Admin</h1>
-    <div class="subtitle">Secure Admin Login</div>
 
-    <input type="email" id="email" placeholder="Admin Email">
-    <input type="password" id="password" placeholder="Password">
+    <div class="subtitle">
+      Secure Admin Login
+    </div>
 
-    <button onclick="login()">Login</button>
+    <input
+      type="email"
+      id="email"
+      placeholder="Admin Email"
+      autocomplete="email"
+    >
+
+    <input
+      type="password"
+      id="password"
+      placeholder="Password"
+      autocomplete="current-password"
+    >
+
+    <button id="loginButton" onclick="login()">
+      Login
+    </button>
 
     <div id="message"></div>
   </div>
 
   <script>
-    const SUPABASE_URL ="https://sbnyvlpsbxfyphmtxpor.supabase.co";
-    const SUPABASE_KEY ="sb_publishable_FYHEtuDDiFFDejg7vKunqw_JhL17yTR";
+    const SUPABASE_URL = "https://sbnyvlpsbxfyphmtxpor.supabase.co";
+
+    const SUPABASE_KEY = "sb_publishable_FYHEtuDDiFFDejg7vKunqw_JhL17yTR";
 
     const supabaseClient = window.supabase.createClient(
       SUPABASE_URL,
@@ -95,37 +153,50 @@
     );
 
     async function login() {
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value.trim();
 
-  const message = document.getElementById("message");
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      const message = document.getElementById("message");
+      const button = document.getElementById("loginButton");
 
-  
-
-
-
-  
+      message.textContent = "";
 
       if (!email || !password) {
         message.textContent = "Please enter email and password.";
         return;
       }
 
-      message.textContent = "Logging in...";
+      button.disabled = true;
+      button.textContent = "Logging in...";
 
-      const { error } = await supabaseClient.auth.signInWithPassword({
-        email: email,
-        password: password
-      });
+      try {
 
-      if (error) {
-        message.textContent = error.message;
-        return;
+        const { data, error } =
+          await supabaseClient.auth.signInWithPassword({
+            email: email,
+            password: password
+          });
+
+        if (error) {
+          message.textContent = error.message;
+          button.disabled = false;
+          button.textContent = "Login";
+          return;
+        }
+
+        if (data.session) {
+          window.location.href = "admin-dashboard.html";
+        }
+
+      } catch (error) {
+
+        message.textContent = "Login failed. Please try again.";
+        button.disabled = false;
+        button.textContent = "Login";
+
       }
-
-      window.location.href = "admin-dashboard.html";
     }
   </script>
 
 </body>
-</html>
+  </html>
