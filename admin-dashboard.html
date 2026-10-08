@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DEEPZ Admin Dashboard</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:Arial,sans-serif;
+  background:#07152b;
+  color:white;
+}
+
+.header{
+  background:#0d2342;
+  padding:18px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid #29415f;
+}
+
+.logo{
+  font-size:21px;
+  font-weight:bold;
+}
+
+.logout{
+  background:#c62828;
+  color:white;
+  border:0;
+  padding:10px 16px;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+.container{
+  padding:20px;
+  max-width:1100px;
+  margin:auto;
+}
+
+.welcome{
+  margin-bottom:20px;
+}
+
+.welcome h1{
+  font-size:28px;
+  margin-bottom:8px;
+}
+
+.welcome p{
+  color:#b9c7d8;
+}
+
+.cards{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
+  margin-top:20px;
+}
+
+.card{
+  background:#0d2342;
+  padding:22px;
+  border-radius:14px;
+  border:1px solid #29415f;
+}
+
+.card h3{
+  font-size:17px;
+  margin-bottom:10px;
+}
+
+.card p{
+  color:#b9c7d8;
+  font-size:14px;
+}
+
+.number{
+  font-size:30px;
+  font-weight:bold;
+  margin-bottom:5px;
+}
+
+.menu{
+  margin-top:25px;
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:15px;
+}
+
+.menu button{
+  background:#0d2342;
+  color:white;
+  border:1px solid #29415f;
+  padding:18px;
+  border-radius:12px;
+  text-align:left;
+  font-size:16px;
+  cursor:pointer;
+}
+
+.menu button:hover{
+  background:#12345d;
+}
+
+.status{
+  margin-top:25px;
+  padding:15px;
+  background:#0d2342;
+  border-radius:12px;
+  color:#8ee6a7;
+}
+
+@media(max-width:700px){
+  .cards{
+    grid-template-columns:1fr;
+  }
+
+  .menu{
+    grid-template-columns:1fr;
+  }
+
+  .welcome h1{
+    font-size:24px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <div class="logo">DEEPZ Admin Panel</div>
+  <button class="logout" onclick="logout()">Logout</button>
+</div>
+
+<div class="container">
+
+  <div class="welcome">
+    <h1>Admin Dashboard</h1>
+    <p id="adminEmail">Checking login...</p>
+  </div>
+
+  <div class="cards">
+
+    <div class="card">
+      <div class="number">0</div>
+      <h3>Enquiries</h3>
+      <p>Customer booking enquiries</p>
+    </div>
+
+    <div class="card">
+      <div class="number">96</div>
+      <h3>SEO Pages</h3>
+      <p>Website SEO landing pages</p>
+    </div>
+
+    <div class="card">
+      <div class="number">6</div>
+      <h3>Main Pages</h3>
+      <p>Home, About, Services and more</p>
+    </div>
+
+  </div>
+
+  <div class="menu">
+
+    <button onclick="alert('Enquiries section will be connected next.')">
+      📩 Enquiries
+    </button>
+
+    <button onclick="alert('Pages section will be connected next.')">
+      📄 Website Pages
+    </button>
+
+    <button onclick="alert('Vehicles section will be connected next.')">
+      🚕 Vehicles
+    </button>
+
+    <button onclick="alert('Destinations section will be connected next.')">
+      📍 Destinations
+    </button>
+
+    <button onclick="alert('SEO settings will be connected next.')">
+      🔍 SEO Settings
+    </button>
+
+    <button onclick="alert('Website settings will be connected next.')">
+      ⚙️ Website Settings
+    </button>
+
+  </div>
+
+  <div class="status">
+    ✓ Secure Supabase authentication active
+  </div>
+
+</div>
+
+<script>
+
+const SUPABASE_URL = "https://sbnyvlpsbxfyphmtxpor.supabase.co";
+const SUPABASE_KEY = "sb_publishable_FYHEtuDDiFFDejg7vKunqw_JhL17yTR";
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+async function checkLogin(){
+
+  const { data, error } = await supabaseClient.auth.getUser();
+
+  if(error || !data.user){
+
+    window.location.href = "admin-login.html";
+    return;
+  }
+
+  document.getElementById("adminEmail").textContent =
+    "Logged in as: " + data.user.email;
+}
+
+async function logout(){
+
+  await supabaseClient.auth.signOut();
+
+  window.location.href = "admin-login.html";
+}
+
+checkLogin();
+
+</script>
+
+</body>
+  </html>
