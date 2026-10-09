@@ -3,70 +3,231 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>DEEPZ Admin Dashboard</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f4f7fb;color:#172033}
-.top{background:#071b31;color:#fff;padding:20px}
-.top-inner{max-width:1100px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:15px}
-.logo{font-size:25px;font-weight:700}
-.sub{font-size:13px;opacity:.8;margin-top:4px}
-button{border:0;border-radius:8px;padding:11px 16px;font-weight:700;cursor:pointer}
-.logout{background:#fff;color:#071b31}
-.wrap{max-width:1100px;margin:25px auto;padding:0 15px}
-.welcome{margin-bottom:20px}
-.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:25px}
-.card{background:#fff;border-radius:12px;padding:22px;box-shadow:0 3px 14px rgba(0,0,0,.08)}
-.card h3{margin:0 0 8px;font-size:15px;color:#667085}
-.num{font-size:30px;font-weight:800}
-.panel{background:#fff;border-radius:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);overflow:hidden}
-.panel-head{padding:18px 20px;border-bottom:1px solid #e5e7eb;display:flex;justify-content:space-between;align-items:center;gap:10px}
-.panel-head h2{margin:0;font-size:20px}
-.refresh{background:#071b31;color:#fff}
-.status{padding:12px 20px;font-size:14px}
-.table-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;min-width:1050px}
-th,td{padding:13px 12px;border-bottom:1px solid #eee;text-align:left;font-size:14px;vertical-align:top}
-th{background:#f8fafc;color:#475467}
-.phone-link{color:#0866d9;font-weight:700;text-decoration:none;white-space:nowrap}
-.contact-action{display:inline-block;margin:2px;padding:8px 10px;border-radius:7px;text-decoration:none;font-size:13px;font-weight:700;white-space:nowrap}
-.call-action{background:#e8f2ff;color:#0866d9}
-.whatsapp-action{background:#e7f8ee;color:#087b43}
-.empty{padding:30px;text-align:center;color:#667085}
-.error{color:#b42318}
+* {
+  box-sizing: border-box;
+}
 
-.seo-nav{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 20px}
-.seo-nav button{background:#e8edf5;color:#071b31}
-.seo-nav button.active{background:#071b31;color:#fff}
-.seo-panel{background:#fff;border-radius:12px;box-shadow:0 3px 14px rgba(0,0,0,.08);overflow:hidden;margin-bottom:22px}
-.seo-form{padding:20px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.seo-form label{display:block;font-size:14px;font-weight:700;color:#344054;margin-bottom:6px}
-.seo-form input,.seo-form textarea,.seo-form select{width:100%;border:1px solid #d0d5dd;border-radius:8px;padding:12px;font:inherit;color:#172033;background:#fff}
-.seo-form textarea{min-height:110px;resize:vertical}
-.seo-form .wide{grid-column:1/-1}
-.seo-actions{display:flex;gap:10px;flex-wrap:wrap;padding:0 20px 20px}
-.seo-primary{background:#0877f9;color:#fff}
-.seo-secondary{background:#e8edf5;color:#172033}
-.seo-note{margin:0 20px 20px;padding:12px 14px;border-radius:8px;background:#fff7e6;color:#7a4b00;font-size:14px;line-height:1.5}
-.seo-list{padding:0 20px 20px}
-.seo-item{border:1px solid #e5e7eb;border-radius:9px;padding:14px;margin-top:10px;display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
-.seo-item h3{margin:0 0 5px;font-size:16px}
-.seo-item p{margin:4px 0;color:#667085;font-size:13px;overflow-wrap:anywhere}
-.seo-item-actions{display:flex;gap:6px;flex-wrap:wrap}
-.seo-item-actions button{padding:8px 10px}
-.seo-hidden{display:none!important}
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f2f5fb;
+  color: #182235;
+}
 
-@media(max-width:700px){
- .cards{grid-template-columns:1fr}
- .top-inner{align-items:flex-start}
- .logo{font-size:21px}
- .seo-form{grid-template-columns:1fr}
- .seo-form .wide{grid-column:auto}
- .seo-item{display:block}
- .seo-item-actions{margin-top:10px}
+.top {
+  background: #071b31;
+  color: white;
+  padding: 20px;
+}
+
+.top-inner {
+  max-width: 1100px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.logo {
+  font-size: 23px;
+  font-weight: bold;
+}
+
+.sub {
+  font-size: 13px;
+  opacity: .8;
+  margin-top: 5px;
+}
+
+button {
+  border: 0;
+  border-radius: 9px;
+  padding: 13px 18px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.logout {
+  background: white;
+  color: #071b31;
+}
+
+.wrap {
+  max-width: 1100px;
+  margin: 25px auto;
+  padding: 0 16px;
+}
+
+.welcome {
+  margin-bottom: 20px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 25px;
+}
+
+.card {
+  background: white;
+  border-radius: 14px;
+  padding: 24px;
+  box-shadow: 0 5px 20px #17243a0d;
+}
+
+.card h3 {
+  margin: 0 0 12px;
+  font-size: 16px;
+  color: #667085;
+}
+
+.num {
+  font-size: 34px;
+  font-weight: 800;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.primary {
+  background: #071b31;
+  color: white;
+}
+
+.secondary {
+  background: #e4ebf7;
+  color: #071b31;
+}
+
+.panel {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 5px 20px #17243a0d;
+  margin-bottom: 25px;
+}
+
+.panel-head {
+  padding: 18px 20px;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.panel-head h2 {
+  margin: 0;
+  font-size: 21px;
+}
+
+.refresh {
+  background: #071b31;
+  color: white;
+}
+
+.status {
+  padding: 15px 20px;
+  color: #344054;
+  overflow-wrap: anywhere;
+}
+
+.error {
+  color: #b42318;
+  background: #fef3f2;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  width: 100%;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 850px;
+}
+
+th, td {
+  text-align: left;
+  padding: 15px;
+  border-bottom: 1px solid #eaecf0;
+  font-size: 14px;
+  vertical-align: top;
+}
+
+th {
+  background: #f8fafc;
+  color: #475467;
+  white-space: nowrap;
+}
+
+td {
+  overflow-wrap: anywhere;
+  max-width: 280px;
+}
+
+tr:last-child td {
+  border-bottom: 0;
+}
+
+.empty {
+  padding: 25px;
+  text-align: center;
+  color: #667085;
+}
+
+.seo-content {
+  padding: 20px;
+  line-height: 1.8;
+}
+
+.hidden {
+  display: none !important;
+}
+
+footer {
+  text-align: center;
+  color: #667085;
+  padding: 25px;
+  font-size: 13px;
+}
+
+@media (max-width: 650px) {
+  .cards {
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    padding: 20px;
+  }
+
+  .top-inner {
+    align-items: flex-start;
+  }
+
+  .logo {
+    font-size: 20px;
+  }
+
+  .wrap {
+    margin-top: 18px;
+  }
 }
 </style>
 </head>
@@ -76,494 +237,291 @@ th{background:#f8fafc;color:#475467}
 <header class="top">
   <div class="top-inner">
     <div>
-      <div class="logo">DEEPZ Admin</div>
-      <div class="sub" id="adminEmail">Checking login...</div>
+      <div class="logo">DEEPZ Tour's and Travels</div>
+      <div class="sub">Admin Dashboard</div>
     </div>
-    <button class="logout" id="logoutBtn">Logout</button>
+
+    <button class="logout" id="logoutBtn">
+      Logout
+    </button>
   </div>
 </header>
 
 <main class="wrap">
 
-  <div class="welcome">
-    <h1>Admin Dashboard</h1>
-    <p>Manage DEEPZ Tour's and Travels website enquiries.</p>
-  </div>
+  <section class="welcome">
+    <h2>Welcome, Admin!</h2>
+    <p>Manage your booking enquiries and website pages.</p>
+    <p id="adminEmail"></p>
+  </section>
 
-  <div class="cards">
+  <section class="cards">
+
     <div class="card">
-      <h3>Enquiries</h3>
+      <h3>Total Enquiries</h3>
       <div class="num" id="enquiryCount">0</div>
     </div>
+
     <div class="card">
       <h3>SEO Pages</h3>
       <div class="num">96</div>
     </div>
+
     <div class="card">
       <h3>Main Pages</h3>
       <div class="num">6</div>
     </div>
-  </div>
 
-  <div class="seo-nav">
-    <button type="button" class="active" id="showEnquiriesBtn">📩 Booking Enquiries</button>
-    <button type="button" id="showSeoBtn">➕ SEO Pages</button>
-  </div>
-
-  <section class="seo-panel seo-hidden" id="seoManager">
-    <div class="panel-head">
-      <h2>SEO Pages</h2>
-      <button class="refresh" type="button" id="newSeoBtn">＋ Add New SEO Page</button>
-    </div>
-
-    <div class="seo-note">
-      <strong>Important:</strong> SEO drafts are saved only in this browser and can be exported as HTML.
-      They are not published automatically. Your existing 96 SEO pages will not be changed.
-    </div>
-
-    <form id="seoForm" class="seo-form seo-hidden">
-      <input type="hidden" id="seoEditId">
-
-      <div>
-        <label for="seoPageTitle">Page Title *</label>
-        <input id="seoPageTitle" required maxlength="120" placeholder="Tarikere to Bangalore Taxi">
-      </div>
-
-      <div>
-        <label for="seoSlug">URL Slug *</label>
-        <input id="seoSlug" required pattern="[a-z0-9]+(?:-[a-z0-9]+)*" placeholder="tarikere-to-bangalore-taxi">
-        <small>URL: https://deepztoursandtravels.com/<span id="seoSlugPreview">your-page-name</span>.html</small>
-      </div>
-
-      <div class="wide">
-        <label for="seoMetaTitle">Meta Title *</label>
-        <input id="seoMetaTitle" required maxlength="60" placeholder="Tarikere to Bangalore Taxi | DEEPZ Tour's and Travels">
-      </div>
-
-      <div class="wide">
-        <label for="seoMetaDescription">Meta Description *</label>
-        <textarea id="seoMetaDescription" required maxlength="160" placeholder="Write a helpful search description (up to 160 characters)."></textarea>
-      </div>
-
-      <div class="wide">
-        <label for="seoH1">Main Heading (H1) *</label>
-        <input id="seoH1" required placeholder="Tarikere to Bangalore Taxi Service">
-      </div>
-
-      <div class="wide">
-        <label for="seoContent">SEO Page Content *</label>
-        <textarea id="seoContent" required style="min-height:180px" placeholder="Write useful content for customers. Separate paragraphs with a blank line."></textarea>
-      </div>
-
-      <div>
-        <label for="seoLocation">Location / Service</label>
-        <input id="seoLocation" placeholder="Tarikere, Bangalore Airport Taxi">
-      </div>
-
-      <div>
-        <label for="seoStatus">Status</label>
-        <select id="seoStatus">
-          <option>Draft</option>
-          <option>Ready to export</option>
-        </select>
-      </div>
-    </form>
-
-    <div class="seo-actions seo-hidden" id="seoFormActions">
-      <button class="seo-primary" type="submit" form="seoForm">Save Draft</button>
-      <button class="seo-secondary" type="button" id="exportSeoBtn">Export HTML</button>
-      <button class="seo-secondary" type="button" id="cancelSeoBtn">Cancel</button>
-    </div>
-
-    <div class="seo-list">
-      <h3>SEO Page Drafts Saved in This Browser</h3>
-      <p id="seoDraftStatus" class="status">No drafts loaded yet.</p>
-      <div id="seoDraftList"></div>
-    </div>
   </section>
 
-  <div id="enquiriesSection">
-    <section class="panel">
-      <div class="panel-head">
-        <h2>Booking Enquiries</h2>
-        <button class="refresh" id="refreshBtn">Refresh</button>
-      </div>
+  <section class="actions">
 
-      <div class="status" id="status">Loading enquiries...</div>
+    <button class="primary" id="showBookings">
+      📩 Booking Enquiries
+    </button>
 
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Pickup</th>
-              <th>Drop</th>
-              <th>Travel Date</th>
-              <th>Service</th>
-              <th>Name</th>
-              <th>Phone</th>
-              <th>Contact</th>
-            </tr>
-          </thead>
-          <tbody id="enquiryBody"></tbody>
-        </table>
-      </div>
+    <button class="secondary" id="showSEO">
+      ➕ SEO Pages
+    </button>
 
-      <div class="empty" id="empty" style="display:none">
-        No booking enquiries yet.
-      </div>
-    </section>
-  </div>
+  </section>
+
+  <section class="panel" id="bookingPanel">
+
+    <div class="panel-head">
+      <h2>Booking Enquiries</h2>
+
+      <button class="refresh" id="refreshBtn">
+        Refresh
+      </button>
+    </div>
+
+    <div class="status" id="status">
+      Connecting to Supabase...
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Date Received</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Pickup</th>
+            <th>Drop Location</th>
+            <th>Travel Date</th>
+            <th>Pickup Time</th>
+            <th>Service</th>
+            <th>Message</th>
+          </tr>
+        </thead>
+
+        <tbody id="bookingRows"></tbody>
+      </table>
+    </div>
+
+    <div class="empty hidden" id="empty">
+      No booking enquiries found.
+    </div>
+
+  </section>
+
+  <section class="panel hidden" id="seoPanel">
+
+    <div class="panel-head">
+      <h2>Website SEO Pages</h2>
+    </div>
+
+    <div class="seo-content">
+      <p><strong>DEEPZ Tour's and Travels</strong></p>
+
+      <p>Popular service pages:</p>
+
+      <ul>
+        <li>Tarikere to Bangalore Taxi</li>
+        <li>Tarikere to Bangalore Airport Taxi</li>
+        <li>Chikkamagaluru Local Sightseeing</li>
+        <li>Chikkamagaluru to Bangalore</li>
+        <li>Chikkamagaluru to Mysore</li>
+        <li>Chikkamagaluru to Coorg</li>
+        <li>Chikkamagaluru to Ooty</li>
+        <li>Chikkamagaluru to Mangalore</li>
+        <li>Chikkamagaluru to Dharmasthala</li>
+        <li>Chikkamagaluru to Udupi</li>
+        <li>Chikkamagaluru to Horanadu</li>
+        <li>Chikkamagaluru to Sringeri</li>
+      </ul>
+
+      <p>
+        Website:
+        <a href="https://deepztoursandtravels.com"
+           target="_blank" rel="noopener">
+          deepztoursandtravels.com
+        </a>
+      </p>
+
+      <p>
+        ಈ ವಿಭಾಗವು ನಿಮ್ಮ ವೆಬ್‌ಸೈಟ್‌ನ SEO ಪುಟಗಳ ಮಾಹಿತಿಯನ್ನು
+        ತೋರಿಸುತ್ತದೆ. ಇಲ್ಲಿ ಪುಟಗಳನ್ನು ಎಡಿಟ್ ಮಾಡುವ ಸೌಲಭ್ಯ
+        ಪ್ರಸ್ತುತ ಸೇರಿಸಲಾಗಿಲ್ಲ.
+      </p>
+    </div>
+
+  </section>
 
 </main>
 
+<footer>
+  DEEPZ Tour's and Travels © 2026
+</footer>
+
 <script>
-const SUPABASE_URL = "https://sbnyvlpsbxfyphmtxpor.supabase.co";
-const SUPABASE_KEY = "sb_publishable_FYHEtuDDiFFDejg7vKunqw_JhL17yTR";
+const SUPABASE_URL =
+  "https://sbnyvlpsbxfyphmtxpor.supabase.co";
 
-const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const SUPABASE_KEY =
+  "sb_publishable_FYHEtuDDiFFDejg7vKunqw_JhL17yTR";
 
-const emailEl = document.getElementById("adminEmail");
-const countEl = document.getElementById("enquiryCount");
-const bodyEl = document.getElementById("enquiryBody");
+const client = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
 const statusEl = document.getElementById("status");
+const countEl = document.getElementById("enquiryCount");
+const rowsEl = document.getElementById("bookingRows");
 const emptyEl = document.getElementById("empty");
 
-function esc(value) {
-  return String(value ?? "").replace(/[&<>"']/g, c => ({
-    "&":"&amp;",
-    "<":"&lt;",
-    ">":"&gt;",
-    '"':"&quot;",
-    "'":"&#039;"
-  }[c]));
+function addCell(row, value) {
+  const td = document.createElement("td");
+
+  if (value === null || value === undefined || value === "") {
+    td.textContent = "Not provided";
+  } else {
+    td.textContent = String(value);
+  }
+
+  row.appendChild(td);
+}
+
+function formatDate(value) {
+  if (!value) return "Not provided";
+
+  const d = new Date(value);
+
+  if (Number.isNaN(d.getTime())) {
+    return value;
+  }
+
+  return d.toLocaleString("en-IN");
+}
+
+async function checkAdmin() {
+  const { data, error } = await client.auth.getUser();
+
+  if (error || !data.user) {
+    window.location.href = "admin-login.html";
+    return null;
+  }
+
+  document.getElementById("adminEmail").textContent =
+    data.user.email || "Administrator";
+
+  return data.user;
 }
 
 async function loadDashboard() {
-  statusEl.textContent = "Loading enquiries...";
+  statusEl.textContent = "Loading booking enquiries...";
   statusEl.className = "status";
+  rowsEl.replaceChildren();
+  emptyEl.classList.add("hidden");
 
-  const {
-    data: { user },
-    error: userError
-  } = await client.auth.getUser();
+  const user = await checkAdmin();
 
-  if (userError || !user) {
-    window.location.href = "admin-login.html";
-    return;
-  }
-
-  emailEl.textContent = user.email || "Admin";
+  if (!user) return;
 
   const { data, error } = await client
     .from("enquiries")
-    .select("id,created_at,name,phone,pickup,drop_location,travel_date,service")
+    .select("*")
     .order("created_at", { ascending: false });
 
   if (error) {
-    statusEl.textContent = "Could not load enquiries: " + error.message;
+    statusEl.textContent =
+      "Could not load enquiries: " + error.message;
+
     statusEl.className = "status error";
+    countEl.textContent = "—";
     return;
   }
 
-  const rows = data || [];
-  countEl.textContent = rows.length;
-  bodyEl.innerHTML = "";
-  emptyEl.style.display = rows.length ? "none" : "block";
+  const enquiries = data || [];
 
-  rows.forEach(row => {
+  countEl.textContent = enquiries.length;
+
+  if (enquiries.length === 0) {
+    statusEl.textContent = "Enquiries loaded successfully.";
+    emptyEl.classList.remove("hidden");
+    return;
+  }
+
+  enquiries.forEach(function(item) {
     const tr = document.createElement("tr");
 
-    const rawPhone = String(row.phone || "").trim();
-    const telPhone = rawPhone.replace(/[^0-9+]/g, "");
-    const digits = rawPhone.replace(/\D/g, "");
-    const whatsappNumber = digits.length === 10 ? "91" + digits : digits;
+    addCell(tr, formatDate(item.created_at));
+    addCell(tr, item.name);
+    addCell(tr, item.phone);
+    addCell(tr, item.pickup);
+    addCell(tr, item.drop_location);
+    addCell(tr, item.travel_date);
+    addCell(tr, item.pickup_time);
+    addCell(tr, item.service);
+    addCell(tr, item.message);
 
-    const phoneCell = rawPhone && telPhone
-      ? `<a class="phone-link" href="tel:${esc(telPhone)}">${esc(rawPhone)}</a>`
-      : "Not provided";
-
-    const contactCell = digits
-      ? `<a class="contact-action call-action" href="tel:${esc(telPhone)}">📞 Call</a>
-         <a class="contact-action whatsapp-action" href="https://wa.me/${esc(whatsappNumber)}" target="_blank" rel="noopener noreferrer">WhatsApp</a>`
-      : "—";
-
-    tr.innerHTML = `
-      <td>${esc(row.created_at ? new Date(row.created_at).toLocaleString("en-IN") : "")}</td>
-      <td>${esc(row.pickup)}</td>
-      <td>${esc(row.drop_location)}</td>
-      <td>${esc(row.travel_date)}</td>
-      <td>${esc(row.service)}</td>
-      <td>${esc(row.name)}</td>
-      <td>${phoneCell}</td>
-      <td>${contactCell}</td>
-    `;
-
-    bodyEl.appendChild(tr);
+    rowsEl.appendChild(tr);
   });
 
-  statusEl.textContent = rows.length
-    ? "Enquiries loaded successfully."
-    : "No enquiries found.";
+  statusEl.textContent =
+    "Enquiries loaded successfully. Total: " +
+    enquiries.length;
 }
 
-document.getElementById("refreshBtn").addEventListener("click", loadDashboard);
+document.getElementById("refreshBtn")
+  .addEventListener("click", loadDashboard);
 
-document.getElementById("logoutBtn").addEventListener("click", async () => {
-  await client.auth.signOut();
-  window.location.href = "admin-login.html";
-});
+document.getElementById("showBookings")
+  .addEventListener("click", function() {
+    document.getElementById("bookingPanel")
+      .classList.remove("hidden");
+
+    document.getElementById("seoPanel")
+      .classList.add("hidden");
+
+    loadDashboard();
+  });
+
+document.getElementById("showSEO")
+  .addEventListener("click", function() {
+    document.getElementById("bookingPanel")
+      .classList.add("hidden");
+
+    document.getElementById("seoPanel")
+      .classList.remove("hidden");
+  });
+
+document.getElementById("logoutBtn")
+  .addEventListener("click", async function() {
+    const { error } = await client.auth.signOut();
+
+    if (error) {
+      alert("Logout failed: " + error.message);
+      return;
+    }
+
+    window.location.href = "admin-login.html";
+  });
 
 loadDashboard();
-
-/* SEO Page Manager: drafts are saved in this browser only. */
-const seoKey = "deepzSeoPageDraftsV1";
-const seoForm = document.getElementById("seoForm");
-const seoManager = document.getElementById("seoManager");
-const enquiriesSection = document.getElementById("enquiriesSection");
-const seoFormActions = document.getElementById("seoFormActions");
-const seoDraftList = document.getElementById("seoDraftList");
-const seoDraftStatus = document.getElementById("seoDraftStatus");
-
-const sf = {
-  id: document.getElementById("seoEditId"),
-  title: document.getElementById("seoPageTitle"),
-  slug: document.getElementById("seoSlug"),
-  meta: document.getElementById("seoMetaTitle"),
-  desc: document.getElementById("seoMetaDescription"),
-  h1: document.getElementById("seoH1"),
-  content: document.getElementById("seoContent"),
-  location: document.getElementById("seoLocation"),
-  status: document.getElementById("seoStatus")
-};
-
-let seoDrafts = [];
-
-function slugify(s) {
-  return String(s || "").toLowerCase().trim()
-    .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-}
-
-function loadSeoDrafts() {
-  try {
-    seoDrafts = JSON.parse(localStorage.getItem(seoKey) || "[]");
-  } catch (e) {
-    seoDrafts = [];
-  }
-  renderSeoDrafts();
-}
-
-function saveSeoDrafts() {
-  localStorage.setItem(seoKey, JSON.stringify(seoDrafts));
-  renderSeoDrafts();
-}
-
-function renderSeoDrafts() {
-  seoDraftList.innerHTML = "";
-  seoDraftStatus.textContent = seoDrafts.length
-    ? `${seoDrafts.length} draft(s) saved on this browser.`
-    : "No SEO page drafts saved yet.";
-
-  seoDrafts.forEach(p => {
-    const item = document.createElement("div");
-    item.className = "seo-item";
-
-    const info = document.createElement("div");
-    const title = document.createElement("h3");
-    const slug = document.createElement("p");
-    const meta = document.createElement("p");
-
-    title.textContent = p.title;
-    slug.textContent = `/${p.slug}.html · ${p.status}`;
-    meta.textContent = p.meta;
-    info.append(title, slug, meta);
-
-    const actions = document.createElement("div");
-    actions.className = "seo-item-actions";
-
-    const button = (text, cls, fn) => {
-      const b = document.createElement("button");
-      b.type = "button";
-      b.className = cls;
-      b.textContent = text;
-      b.addEventListener("click", fn);
-      return b;
-    };
-
-    actions.append(
-      button("Edit", "seo-secondary", () => fillSeoForm(p)),
-      button("Export HTML", "seo-primary", () => downloadSeoHtml(p)),
-      button("Delete", "seo-secondary", () => {
-        if (confirm("Delete this local draft only? Live website pages will not be affected.")) {
-          seoDrafts = seoDrafts.filter(x => x.id !== p.id);
-          saveSeoDrafts();
-        }
-      })
-    );
-
-    item.append(info, actions);
-    seoDraftList.append(item);
-  });
-}
-
-function openSeoForm() {
-  seoForm.reset();
-  sf.id.value = "";
-  sf.slug.dataset.touched = "";
-  document.getElementById("seoSlugPreview").textContent = "your-page-name";
-  seoForm.classList.remove("seo-hidden");
-  seoFormActions.classList.remove("seo-hidden");
-}
-
-function fillSeoForm(p) {
-  openSeoForm();
-  sf.id.value = p.id;
-  sf.title.value = p.title;
-  sf.slug.value = p.slug;
-  sf.meta.value = p.meta;
-  sf.desc.value = p.desc;
-  sf.h1.value = p.h1;
-  sf.content.value = p.content;
-  sf.location.value = p.location || "";
-  sf.status.value = p.status || "Draft";
-  document.getElementById("seoSlugPreview").textContent = p.slug;
-  window.scrollTo({ top: seoManager.offsetTop, behavior: "smooth" });
-}
-
-sf.title.addEventListener("input", () => {
-  if (!sf.id.value && !sf.slug.dataset.touched) {
-    sf.slug.value = slugify(sf.title.value);
-    document.getElementById("seoSlugPreview").textContent = sf.slug.value || "your-page-name";
-  }
-});
-
-sf.slug.addEventListener("input", () => {
-  sf.slug.value = slugify(sf.slug.value);
-  sf.slug.dataset.touched = "1";
-  document.getElementById("seoSlugPreview").textContent = sf.slug.value || "your-page-name";
-});
-
-document.getElementById("showSeoBtn").addEventListener("click", () => {
-  seoManager.classList.remove("seo-hidden");
-  enquiriesSection.classList.add("seo-hidden");
-  document.getElementById("showSeoBtn").classList.add("active");
-  document.getElementById("showEnquiriesBtn").classList.remove("active");
-  loadSeoDrafts();
-});
-
-document.getElementById("showEnquiriesBtn").addEventListener("click", () => {
-  enquiriesSection.classList.remove("seo-hidden");
-  seoManager.classList.add("seo-hidden");
-  document.getElementById("showEnquiriesBtn").classList.add("active");
-  document.getElementById("showSeoBtn").classList.remove("active");
-});
-
-document.getElementById("newSeoBtn").addEventListener("click", openSeoForm);
-
-document.getElementById("cancelSeoBtn").addEventListener("click", () => {
-  seoForm.reset();
-  sf.id.value = "";
-  seoForm.classList.add("seo-hidden");
-  seoFormActions.classList.add("seo-hidden");
-});
-
-seoForm.addEventListener("submit", e => {
-  e.preventDefault();
-
-  const p = {
-    id: sf.id.value || String(Date.now()),
-    title: sf.title.value.trim(),
-    slug: slugify(sf.slug.value),
-    meta: sf.meta.value.trim(),
-    desc: sf.desc.value.trim(),
-    h1: sf.h1.value.trim(),
-    content: sf.content.value.trim(),
-    location: sf.location.value.trim(),
-    status: sf.status.value
-  };
-
-  if (!p.slug) {
-    alert("Enter a valid URL slug.");
-    return;
-  }
-
-  if (seoDrafts.some(x => x.slug === p.slug && x.id !== p.id)) {
-    alert("A draft with this slug already exists.");
-    return;
-  }
-
-  const i = seoDrafts.findIndex(x => x.id === p.id);
-  if (i >= 0) seoDrafts[i] = p;
-  else seoDrafts.unshift(p);
-
-  try {
-    saveSeoDrafts();
-  } catch (err) {
-    alert("Could not save this draft in browser storage.");
-    return;
-  }
-
-  seoForm.classList.add("seo-hidden");
-  seoFormActions.classList.add("seo-hidden");
-  alert("Draft saved in this browser only. It is not published to your live website yet.");
-});
-
-document.getElementById("exportSeoBtn").addEventListener("click", () => {
-  if (!seoForm.reportValidity()) return;
-
-  downloadSeoHtml({
-    title: sf.title.value,
-    slug: slugify(sf.slug.value),
-    meta: sf.meta.value,
-    desc: sf.desc.value,
-    h1: sf.h1.value,
-    content: sf.content.value,
-    location: sf.location.value
-  });
-});
-
-function downloadSeoHtml(p) {
-  const escape = s => String(s || "").replace(/[&<>"']/g, c => ({
-    "&":"&amp;",
-    "<":"&lt;",
-    ">":"&gt;",
-    '"':"&quot;",
-    "'":"&#39;"
-  }[c]));
-
-  const paras = String(p.content || "").split(/\n\s*\n/)
-    .map(x => `<p>${escape(x).replace(/\n/g, "<br>")}</p>`)
-    .join("\n");
-
-  const page = `<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>${escape(p.meta)}</title>
-<meta name="description" content="${escape(p.desc)}">
-<link rel="canonical" href="https://deepztoursandtravels.com/${escape(p.slug)}.html">
-</head>
-<body>
-<main>
-<h1>${escape(p.h1)}</h1>
-${paras}
-<p><strong>DEEPZ Tour's and Travels</strong> · Tarikere, Chikkamagaluru, Karnataka</p>
-<p><a href="https://wa.me/918722016756">Contact us on WhatsApp</a></p>
-</main>
-</body>
-</html>`;
-
-  const url = URL.createObjectURL(new Blob([page], { type: "text/html;charset=utf-8" }));
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = `${slugify(p.slug)}.html`;
-  a.click();
-  URL.revokeObjectURL(url);
-}
-
-loadSeoDrafts();
 </script>
 
 </body>
-  </html>
+ </html>
