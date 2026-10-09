@@ -5,7 +5,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Our Vehicles | DEEPZ Tour's and Travels</title>
-<meta content="Swift Dzire, Etios, Innova Crysta, Tempo Traveller and Mini Bus services." name="description"/>
+<meta content="Explore vehicles available from DEEPZ Tour’s and Travels." name="description"/>
 <style>
 :root{--navy:#0b2342;--gold:#c9973e;--light:#f7f8fa;--text:#182230}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--text);background:#fff;line-height:1.6}
@@ -542,11 +542,22 @@ footer{background:#06152a;color:#d9e0ea;text-align:center;padding:25px 18px;font
 <a href="index.html">Home</a>
 <a href="about.html">About</a>
 <a href="services.html">Services</a>
-<a href="vehicles.html">Our Vehicles</a>
-<a href="destinations.html">Destination</a>
-<a href="contact.html">Contact</a>
+<a aria-current="page" href="vehicles.html" style="text-decoration:underline;text-decoration-color:#c9973e;text-underline-offset:5px">Vehicles</a>
+<a href="destinations.html">Destinations</a>
+<a href="contact.html">Contact Us</a>
 </nav></div></header>
-<main><section class="alt" id="vehicles">
+<main>
+
+
+
+
+
+
+
+
+
+
+<section class="alt" id="vehicles">
 <div class="wrap vehicles-section-old-style">
 <h2 class="section-title">Our Vehicles</h2>
 <p class="section-sub">Choose the right vehicle for your journey. All vehicles are subject to availability.</p>
@@ -605,7 +616,12 @@ footer{background:#06152a;color:#d9e0ea;text-align:center;padding:25px 18px;font
 </div>
 </section></main>
 <footer>© 2026 DEEPZ Tour's and Travels • Tarikere, Chikkamagaluru • 8722016756</footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script id="deepz-booking-form-script">
+const DEEPZ_SUPABASE_URL = "https://sbnyvlpsbxfyphmtxpor.supabase.co";
+const DEEPZ_SUPABASE_KEY = "sb_publishable_FYHEtuDDiFFDejg7vKunqw_JhL17yTR";
+const deepzSupabase = window.supabase.createClient(DEEPZ_SUPABASE_URL, DEEPZ_SUPABASE_KEY);
+
 (function(){
   var dateField = document.getElementById('deepzDate');
   if(dateField){
@@ -617,15 +633,17 @@ footer{background:#06152a;color:#d9e0ea;text-align:center;padding:25px 18px;font
   }
 })();
 
-function deepzGetQuote(){
+async function deepzGetQuote(){
+  var customerName = document.getElementById('deepzCustomerName').value.trim();
+  var customerPhone = document.getElementById('deepzCustomerPhone').value.trim();
   var pickup = document.getElementById('deepzPickup').value.trim();
   var drop = document.getElementById('deepzDrop').value.trim();
   var date = document.getElementById('deepzDate').value;
   var car = document.getElementById('deepzCar').value;
   var trip = document.getElementById('deepzTrip').value;
 
-  if(!pickup || !drop || !date || !car){
-    alert('Please enter pickup, drop, pick date and car type.');
+  if(!customerName || !customerPhone || !pickup || !drop || !date || !car){
+    alert('Please enter your name, phone number, pickup, drop, pick date and car type.');
     return;
   }
 
@@ -636,13 +654,44 @@ function deepzGetQuote(){
   var message =
     "Hello DEEPZ Tour's and Travels,%0A%0A" +
     "I would like to get a cab quote.%0A%0A" +
+    "Name: " + encodeURIComponent(customerName) + "%0A" +
+    "Phone Number: " + encodeURIComponent(customerPhone) + "%0A" +
     "Pickup: " + encodeURIComponent(pickup) + "%0A" +
     "Drop: " + encodeURIComponent(drop) + "%0A" +
     "Pick Date: " + encodeURIComponent(formattedDate) + "%0A" +
     "Car Type: " + encodeURIComponent(car) + "%0A" +
     "Trip Type: " + encodeURIComponent(trip);
+  var whatsappUrl = 'https://wa.me/918722016756?text=' + message;
 
-  window.open('https://wa.me/918722016756?text=' + message, '_blank');
+  // Open a tab immediately so mobile browsers do not block WhatsApp after the save request.
+  var whatsappWindow = window.open('about:blank', '_blank');
+
+  var enquiry = {
+    name: customerName,
+    phone: customerPhone,
+    pickup: pickup,
+    drop_location: drop,
+    travel_date: date,
+    service: car + ' - ' + trip,
+    message: 'Car Type: ' + car + '\nTrip Type: ' + trip
+  };
+
+  try {
+    const { error } = await deepzSupabase.from('enquiries').insert([enquiry]);
+    if (error) {
+      console.error('DEEPZ booking save failed:', error);
+      if (whatsappWindow) whatsappWindow.location.href = whatsappUrl;
+      alert('Your WhatsApp enquiry will open, but the booking could not be saved to the Admin Dashboard. Please contact the website administrator. Error: ' + error.message);
+      return;
+    }
+    if (whatsappWindow) whatsappWindow.location.href = whatsappUrl;
+    else window.location.href = whatsappUrl;
+    alert('Booking enquiry saved successfully. Please send the message in WhatsApp to confirm your request.');
+  } catch (err) {
+    console.error('DEEPZ booking save failed:', err);
+    if (whatsappWindow) whatsappWindow.location.href = whatsappUrl;
+    alert('Your WhatsApp enquiry will open, but the booking could not be saved to the Admin Dashboard. Please contact the website administrator.');
+  }
 }
 </script>
 <script>
