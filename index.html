@@ -6,7 +6,6 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>DEEPZ Tour's and Travels | Tarikere &amp; Chikkamagaluru Taxi &amp; Tours</title>
 <meta content="DEEPZ Tour's and Travels – taxi, cab and tour services in Tarikere, Chikkamagaluru, Bangalore Airport, Bangalore City and nearby areas. Airport transfers, local sightseeing, outstation cabs, family and group trips, weddings, corporate travel, Tempo Traveller and mini bus service." name="description"/>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{--navy:#0b2342;--gold:#c9973e;--light:#f7f8fa;--text:#182230}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--text);background:#fff;line-height:1.6}
@@ -560,6 +559,14 @@ footer{background:#06152a;color:#d9e0ea;text-align:center;padding:25px 18px;font
 <div class="deepz-booking-card">
 <h2 class="deepz-booking-title">Book Your Cab</h2>
 <div class="deepz-booking-field">
+<label for="deepzCustomerName">Your Name</label>
+<input autocomplete="name" id="deepzCustomerName" placeholder="Enter your name" type="text" required/>
+</div>
+<div class="deepz-booking-field">
+<label for="deepzCustomerPhone">Phone Number</label>
+<input autocomplete="tel" id="deepzCustomerPhone" placeholder="Enter your phone number" type="tel" inputmode="tel" required/>
+</div>
+<div class="deepz-booking-field">
 <label for="deepzPickup">Pickup Location</label>
 <input autocomplete="street-address" id="deepzPickup" placeholder="Enter pickup location" type="text"/>
 </div>
@@ -816,33 +823,17 @@ footer{background:#06152a;color:#d9e0ea;text-align:center;padding:25px 18px;font
   }
 })();
 
-const DEEPZ_SUPABASE_URL = "https://sbnyvlpsbxfyphmtxpor.supabase.co";
-const DEEPZ_SUPABASE_KEY = "sb_publishable_FYHEtuDDiFFDejg7vKunqw_JhL17yTR";
-const DEEPZ_SUPABASE = window.supabase.createClient(DEEPZ_SUPABASE_URL, DEEPZ_SUPABASE_KEY);
-
 async function deepzGetQuote(){
+  var customerName = document.getElementById('deepzCustomerName').value.trim();
+  var customerPhone = document.getElementById('deepzCustomerPhone').value.trim();
   var pickup = document.getElementById('deepzPickup').value.trim();
   var drop = document.getElementById('deepzDrop').value.trim();
   var date = document.getElementById('deepzDate').value;
   var car = document.getElementById('deepzCar').value;
   var trip = document.getElementById('deepzTrip').value;
 
-  if(!pickup || !drop || !date || !car){
-    alert('Please enter pickup, drop, pick date and car type.');
-    return;
-  }
-
-  var { error } = await DEEPZ_SUPABASE.from('enquiries').insert([{
-    pickup: pickup,
-    drop_location: drop,
-    travel_date: date,
-    service: car + ' - ' + trip,
-    message: 'Booking enquiry from website'
-  }]);
-
-  if(error){
-    console.error('Supabase booking error:', error);
-    alert('Booking enquiry could not be saved. Please try again.');
+  if(!customerName || !customerPhone || !pickup || !drop || !date || !car){
+    alert('Please enter your name, phone number, pickup, drop, pick date and car type.');
     return;
   }
 
@@ -853,6 +844,8 @@ async function deepzGetQuote(){
   var message =
     "Hello DEEPZ Tour's and Travels,%0A%0A" +
     "I would like to get a cab quote.%0A%0A" +
+    "Name: " + encodeURIComponent(customerName) + "%0A" +
+    "Phone Number: " + encodeURIComponent(customerPhone) + "%0A" +
     "Pickup: " + encodeURIComponent(pickup) + "%0A" +
     "Drop: " + encodeURIComponent(drop) + "%0A" +
     "Pick Date: " + encodeURIComponent(formattedDate) + "%0A" +
