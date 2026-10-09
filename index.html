@@ -811,7 +811,12 @@ footer{background:#06152a;color:#d9e0ea;text-align:center;padding:25px 18px;font
 </div></section>
 </main>
 <footer>© 2026 DEEPZ Tour's and Travels • Tarikere, Chikkamagaluru • 8722016756</footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script id="deepz-booking-form-script">
+const DEEPZ_SUPABASE_URL = "https://sbnyvlpsbxfyphmtxpor.supabase.co";
+const DEEPZ_SUPABASE_KEY = "sb_publishable_FYHEtuDDiFFDejg7vKunqw_JhL17yTR";
+const deepzSupabase = window.supabase.createClient(DEEPZ_SUPABASE_URL, DEEPZ_SUPABASE_KEY);
+
 (function(){
   var dateField = document.getElementById('deepzDate');
   if(dateField){
@@ -851,8 +856,37 @@ async function deepzGetQuote(){
     "Pick Date: " + encodeURIComponent(formattedDate) + "%0A" +
     "Car Type: " + encodeURIComponent(car) + "%0A" +
     "Trip Type: " + encodeURIComponent(trip);
+  var whatsappUrl = 'https://wa.me/918722016756?text=' + message;
 
-  window.open('https://wa.me/918722016756?text=' + message, '_blank');
+  // Open a tab immediately so mobile browsers do not block WhatsApp after the save request.
+  var whatsappWindow = window.open('about:blank', '_blank');
+
+  var enquiry = {
+    name: customerName,
+    phone: customerPhone,
+    pickup: pickup,
+    drop_location: drop,
+    travel_date: date,
+    service: car + ' - ' + trip,
+    message: 'Car Type: ' + car + '\nTrip Type: ' + trip
+  };
+
+  try {
+    const { error } = await deepzSupabase.from('enquiries').insert([enquiry]);
+    if (error) {
+      console.error('DEEPZ booking save failed:', error);
+      if (whatsappWindow) whatsappWindow.location.href = whatsappUrl;
+      alert('Your WhatsApp enquiry will open, but the booking could not be saved to the Admin Dashboard. Please contact the website administrator. Error: ' + error.message);
+      return;
+    }
+    if (whatsappWindow) whatsappWindow.location.href = whatsappUrl;
+    else window.location.href = whatsappUrl;
+    alert('Booking enquiry saved successfully. Please send the message in WhatsApp to confirm your request.');
+  } catch (err) {
+    console.error('DEEPZ booking save failed:', err);
+    if (whatsappWindow) whatsappWindow.location.href = whatsappUrl;
+    alert('Your WhatsApp enquiry will open, but the booking could not be saved to the Admin Dashboard. Please contact the website administrator.');
+  }
 }
 </script>
 <script>
