@@ -4,121 +4,285 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>DEEPZ Admin Login</title>
+<title>DEEPZ Admin Dashboard</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 *{
   box-sizing:border-box;
-  margin:0;
-  padding:0;
 }
 
 body{
+  margin:0;
   font-family:Arial,sans-serif;
-  background:#07152b;
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  background:#f4f7fb;
+  color:#172033;
+}
+
+.top{
+  background:#071b31;
+  color:#fff;
   padding:20px;
 }
 
-.login-box{
-  width:100%;
-  max-width:400px;
-  background:#ffffff;
-  padding:30px;
-  border-radius:18px;
-  box-shadow:0 10px 35px rgba(0,0,0,.35);
+.top-inner{
+  max-width:1100px;
+  margin:auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
 }
 
 .logo{
-  text-align:center;
-  font-size:28px;
-  font-weight:bold;
-  color:#07152b;
-  margin-bottom:8px;
+  font-size:25px;
+  font-weight:700;
 }
 
-.subtitle{
-  text-align:center;
-  color:#666;
-  margin-bottom:25px;
-}
-
-label{
-  display:block;
-  margin-bottom:7px;
-  font-weight:bold;
-  color:#222;
-}
-
-input{
-  width:100%;
-  padding:14px;
-  border:1px solid #ccc;
-  border-radius:10px;
-  margin-bottom:18px;
-  font-size:16px;
+.sub{
+  font-size:13px;
+  opacity:.8;
+  margin-top:4px;
 }
 
 button{
-  width:100%;
-  padding:14px;
   border:0;
-  border-radius:10px;
-  background:#07152b;
-  color:white;
-  font-size:17px;
-  font-weight:bold;
+  border-radius:8px;
+  padding:11px 16px;
+  font-weight:700;
   cursor:pointer;
 }
 
-button:disabled{
-  opacity:.6;
+.logout{
+  background:#fff;
+  color:#071b31;
 }
 
-#message{
-  margin-top:15px;
-  text-align:center;
+.wrap{
+  max-width:1100px;
+  margin:25px auto;
+  padding:0 15px;
+}
+
+.welcome{
+  margin-bottom:20px;
+}
+
+.cards{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
+  margin-bottom:25px;
+}
+
+.card{
+  background:#fff;
+  border-radius:12px;
+  padding:22px;
+  box-shadow:0 3px 14px rgba(0,0,0,.08);
+}
+
+.card h3{
+  margin:0 0 8px;
+  font-size:15px;
+  color:#667085;
+}
+
+.num{
+  font-size:30px;
+  font-weight:800;
+}
+
+.panel{
+  background:#fff;
+  border-radius:12px;
+  box-shadow:0 3px 14px rgba(0,0,0,.08);
+  overflow:hidden;
+}
+
+.panel-head{
+  padding:18px 20px;
+  border-bottom:1px solid #e5e7eb;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.panel-head h2{
+  margin:0;
+  font-size:20px;
+}
+
+.refresh{
+  background:#071b31;
+  color:#fff;
+}
+
+.status{
+  padding:12px 20px;
   font-size:14px;
+}
+
+.table-wrap{
+  overflow-x:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:800px;
+}
+
+th,
+td{
+  padding:13px 12px;
+  border-bottom:1px solid #eee;
+  text-align:left;
+  font-size:14px;
+  vertical-align:top;
+}
+
+th{
+  background:#f8fafc;
+  color:#475467;
+}
+
+.empty{
+  padding:30px;
+  text-align:center;
+  color:#667085;
+}
+
+.error{
+  color:#b42318;
+}
+
+@media(max-width:700px){
+
+  .cards{
+    grid-template-columns:1fr;
+  }
+
+  .top-inner{
+    align-items:flex-start;
+  }
+
+  .logo{
+    font-size:21px;
+  }
+
 }
 </style>
 </head>
 
 <body>
 
-<div class="login-box">
+<header class="top">
 
-  <div class="logo">DEEPZ Admin</div>
+  <div class="top-inner">
 
-  <div class="subtitle">
-    Secure Admin Login
+    <div>
+      <div class="logo">DEEPZ Admin</div>
+      <div class="sub" id="adminEmail">
+        Checking login...
+      </div>
+    </div>
+
+    <button class="logout" id="logoutBtn">
+      Logout
+    </button>
+
   </div>
 
-  <label>Email</label>
-  <input
-    type="email"
-    id="email"
-    placeholder="Enter admin email"
-  >
+</header>
 
-  <label>Password</label>
-  <input
-    type="password"
-    id="password"
-    placeholder="Enter password"
-  >
 
-  <button id="loginButton" onclick="login()">
-    Login
-  </button>
+<main class="wrap">
 
-  <div id="message"></div>
+  <div class="welcome">
+    <h1>Admin Dashboard</h1>
+    <p>
+      Manage DEEPZ Tour's and Travels website enquiries.
+    </p>
+  </div>
 
-</div>
+
+  <div class="cards">
+
+    <div class="card">
+      <h3>Enquiries</h3>
+      <div class="num" id="enquiryCount">0</div>
+    </div>
+
+    <div class="card">
+      <h3>SEO Pages</h3>
+      <div class="num">96</div>
+    </div>
+
+    <div class="card">
+      <h3>Main Pages</h3>
+      <div class="num">6</div>
+    </div>
+
+  </div>
+
+
+  <section class="panel">
+
+    <div class="panel-head">
+
+      <h2>Booking Enquiries</h2>
+
+      <button class="refresh" id="refreshBtn">
+        Refresh
+      </button>
+
+    </div>
+
+
+    <div class="status" id="status">
+      Loading enquiries...
+    </div>
+
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>Date</th>
+            <th>Pickup</th>
+            <th>Drop</th>
+            <th>Travel Date</th>
+            <th>Service</th>
+            <th>Name</th>
+            <th>Phone</th>
+          </tr>
+
+        </thead>
+
+        <tbody id="enquiryBody"></tbody>
+
+      </table>
+
+    </div>
+
+
+    <div
+      class="empty"
+      id="empty"
+      style="display:none"
+    >
+      No booking enquiries yet.
+    </div>
+
+  </section>
+
+</main>
+
 
 <script>
 
@@ -128,67 +292,198 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
 "sb_publishable_FYHEtuDDiFFDejg7vKunqw_JhL17yTR";
 
-const supabaseClient =
+const client =
 window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_KEY
 );
 
-async function login(){
 
-  const email =
-    document.getElementById("email").value.trim();
+const emailEl =
+document.getElementById("adminEmail");
 
-  const password =
-    document.getElementById("password").value.trim();
+const countEl =
+document.getElementById("enquiryCount");
 
-  const message =
-    document.getElementById("message");
+const bodyEl =
+document.getElementById("enquiryBody");
 
-  const button =
-    document.getElementById("loginButton");
+const statusEl =
+document.getElementById("status");
 
-  if(!email || !password){
+const emptyEl =
+document.getElementById("empty");
 
-    message.style.color = "red";
-    message.textContent =
-      "Please enter email and password.";
+
+function esc(value){
+
+  return String(value ?? "")
+    .replace(/[&<>"']/g, c => ({
+
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#039;"
+
+    }[c]));
+
+}
+
+
+async function loadDashboard(){
+
+  statusEl.textContent =
+  "Loading enquiries...";
+
+  statusEl.className =
+  "status";
+
+
+  const {
+    data: { user },
+    error: userError
+  } =
+  await client.auth.getUser();
+
+
+  if(userError || !user){
+
+    window.location.href =
+    "admin-login.html";
 
     return;
+
   }
 
-  button.disabled = true;
-  button.textContent = "Logging in...";
 
-  const { data, error } =
-    await supabaseClient.auth.signInWithPassword({
-      email: email,
-      password: password
-    });
+  emailEl.textContent =
+  user.email || "Admin";
+
+
+  const {
+    data,
+    error
+  } =
+  await client
+
+    .from("enquiries")
+
+    .select(
+      "id,created_at,name,phone,pickup,drop_location,travel_date,service"
+    )
+
+    .order(
+      "created_at",
+      { ascending:false }
+    );
+
 
   if(error){
 
-    message.style.color = "red";
-    message.textContent = error.message;
+    statusEl.textContent =
+    "Could not load enquiries: " +
+    error.message;
 
-    button.disabled = false;
-    button.textContent = "Login";
+    statusEl.className =
+    "status error";
 
     return;
+
   }
 
-  message.style.color = "green";
-  message.textContent = "Login successful...";
 
-  setTimeout(function(){
+  const rows =
+  data || [];
+
+
+  countEl.textContent =
+  rows.length;
+
+
+  bodyEl.innerHTML = "";
+
+
+  emptyEl.style.display =
+  rows.length
+  ? "none"
+  : "block";
+
+
+  rows.forEach(row => {
+
+    const tr =
+    document.createElement("tr");
+
+
+    tr.innerHTML = `
+
+      <td>
+        ${
+          esc(
+            row.created_at
+            ? new Date(
+                row.created_at
+              ).toLocaleString("en-IN")
+            : ""
+          )
+        }
+      </td>
+
+      <td>${esc(row.pickup)}</td>
+
+      <td>${esc(row.drop_location)}</td>
+
+      <td>${esc(row.travel_date)}</td>
+
+      <td>${esc(row.service)}</td>
+
+      <td>${esc(row.name)}</td>
+
+      <td>${esc(row.phone)}</td>
+
+    `;
+
+
+    bodyEl.appendChild(tr);
+
+  });
+
+
+  statusEl.textContent =
+  rows.length
+  ? "Enquiries loaded successfully."
+  : "No enquiries found.";
+
+}
+
+
+document
+.getElementById("refreshBtn")
+.addEventListener(
+  "click",
+  loadDashboard
+);
+
+
+document
+.getElementById("logoutBtn")
+.addEventListener(
+  "click",
+  async () => {
+
+    await client.auth.signOut();
 
     window.location.href =
-      "admin-dashboard.html";
+    "admin-login.html";
 
-  },1000);
-}
+  }
+);
+
+
+loadDashboard();
 
 </script>
 
 </body>
-</html>
+  </html>
