@@ -480,7 +480,156 @@ document
   }
 );
 
+// DEEPZ SEO PAGE MANAGER
+const seoStyle = document.createElement("style");
+seoStyle.textContent = `
+#deepzSeoBox {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  margin: 20px 0;
+  box-shadow: 0 3px 14px #0001;
+}
+#deepzSeoBox input,
+#deepzSeoBox textarea {
+  width: 100%;
+  padding: 12px;
+  margin: 7px 0 14px;
+  border: 1px solid #ccc;
+  border-radius: 7px;
+  box-sizing: border-box;
+}
+#deepzSeoBox label {
+  display: block;
+  font-weight: bold;
+}
+#deepzSeoBox button {
+  padding: 11px 16px;
+  margin: 5px;
+  border: 0;
+   border-radius: 7px;
+  background: #071b31;
+  color: white;
+}
+#deepzSeoBox .seoDraft {
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+}
+`;
+document.head.appendChild(seoStyle);
 
+const seoBox = document.createElement("section");
+seoBox.id = "deepzSeoBox";
+seoBox.innerHTML = `
+<h2>➕ Add New SEO Page</h2>
+<p>Create SEO page drafts for DEEPZ Tour's and Travels.</p>
+<button type="button" id="seoShowForm">+ Add New SEO Page</button>
+<form id="seoNewForm" hidden>
+<label>Page Title</label>
+<input id="seoTitle" required placeholder="Tarikere to Bangalore Taxi">
+<label>URL Slug</label>
+<input id="seoSlug" required placeholder="tarikere-to-bangalore-taxi">
+<label>Meta Title</label>
+<input id="seoMeta" required>
+<label>Meta Description</label>
+<textarea id="seoDesc" required></textarea>
+<label>Main Heading</label>
+<input id="seoH1" required>
+<label>SEO Content</label>
+<textarea id="seoContent" required rows="7"></textarea>
+<button type="submit">Save Draft</button>
+<button type="button" id="seoExport">Export HTML</button>
+</form>
+<div id="seoDrafts"></div>
+<p><small>Drafts stay in this browser. Exported pages must be uploaded to GitHub to go live.</small></p>
+`;
+
+document.querySelector(".panel").before(seoBox);
+
+const seoForm = document.getElementById("seoNewForm");
+const seoDraftsEl = document.getElementById("seoDrafts");
+let seoPages = JSON.parse(localStorage.getItem("deepzSeoDrafts") || "[]");
+
+function showSeoDrafts() {
+  seoDraftsEl.innerHTML = "";
+  seoPages.forEach((p, i) => {
+    const d = document.createElement("div");
+    d.className = "seoDraft";
+    const title = document.createElement("b");
+    title.textContent = p.title;
+    const exp = document.createElement("button");
+    exp.textContent = "Export HTML";
+    exp.onclick = () => exportSeoPage(p);
+    const del = document.createElement("button");
+    del.textContent = "Delete Draft";
+    del.onclick = () => {
+      if (confirm("Delete this draft?")) {
+        seoPages.splice(i, 1);
+        localStorage.setItem("deepzSeoDrafts", JSON.stringify(seoPages));
+        showSeoDrafts();
+      }
+    };
+    d.append(title, exp, del);
+    seoDraftsEl.appendChild(d);
+  });
+}
+
+function readSeoForm() {
+  return {
+    title: document.getElementById("seoTitle").value.trim(),
+    slug: document.getElementById("seoSlug").value.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""),
+    meta: document.getElementById("seoMeta").value.trim(),
+    desc: document.getElementById("seoDesc").value.trim(),
+    h1: document.getElementById("seoH1").value.trim(),
+    content: document.getElementById("seoContent").value.trim()
+  };
+}
+
+document.getElementById("seoShowForm").onclick = () => {
+  seoForm.hidden = !seoForm.hidden;
+};
+
+seoForm.onsubmit = e => {
+  e.preventDefault();
+  const p = readSeoForm();
+  if (seoPages.some(x => x.slug === p.slug)) {
+    alert("This URL slug already exists.");
+    return;
+  }
+  seoPages.push(p);
+  localStorage.setItem("deepzSeoDrafts", JSON.stringify(seoPages));
+  showSeoDrafts();
+  seoForm.reset();
+  seoForm.hidden = true;
+  alert("Draft saved in this browser only. It is not live yet.");
+};
+
+function exportSeoPage(p) {
+  const esc = s => String(s || "").replace(/[&<>"']/g, c => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  }[c]));
+  const paras = p.content.split(/\n\s*\n/).map(x => "<p>" + esc(x) + "</p>").join("");
+  const page = `<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${esc(p.meta)}</title>
+<meta name="description" content="${esc(p.desc)}">
+<link rel="canonical" href="https://deepztoursandtravels.com/${esc(p.slug)}.html">
+</head><body><h1>${esc(p.h1)}</h1>${paras}
+<p>DEEPZ Tour's and Travels - Tarikere, Chikkamagaluru</p>
+<a href="https://wa.me/918722016756">Contact us on WhatsApp</a></body></html>`;
+  const a = document.createElement("a");
+  const url = URL.createObjectURL(new Blob([page], {type:"text/html;charset=utf-8"}));
+  a.href = url;
+  a.download = p.slug + ".html";
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+document.getElementById("seoExport").onclick = () => {
+  if (seoForm.reportValidity()) exportSeoPage(readSeoForm());
+};
+
+showSeoDrafts();
 loadDashboard();
 
 </script>
