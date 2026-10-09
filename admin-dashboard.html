@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DEEPZ Admin Dashboard</title>
+
+<title>DEEPZ Admin Login</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -17,231 +18,177 @@
 body{
   font-family:Arial,sans-serif;
   background:#07152b;
-  color:white;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
 }
 
-.header{
-  background:#0d2342;
-  padding:18px 20px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  border-bottom:1px solid #29415f;
+.login-box{
+  width:100%;
+  max-width:400px;
+  background:#ffffff;
+  padding:30px;
+  border-radius:18px;
+  box-shadow:0 10px 35px rgba(0,0,0,.35);
 }
 
 .logo{
-  font-size:21px;
-  font-weight:bold;
-}
-
-.logout{
-  background:#c62828;
-  color:white;
-  border:0;
-  padding:10px 16px;
-  border-radius:8px;
-  cursor:pointer;
-}
-
-.container{
-  padding:20px;
-  max-width:1100px;
-  margin:auto;
-}
-
-.welcome{
-  margin-bottom:20px;
-}
-
-.welcome h1{
+  text-align:center;
   font-size:28px;
+  font-weight:bold;
+  color:#07152b;
   margin-bottom:8px;
 }
 
-.welcome p{
-  color:#b9c7d8;
+.subtitle{
+  text-align:center;
+  color:#666;
+  margin-bottom:25px;
 }
 
-.cards{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:15px;
-  margin-top:20px;
-}
-
-.card{
-  background:#0d2342;
-  padding:22px;
-  border-radius:14px;
-  border:1px solid #29415f;
-}
-
-.card h3{
-  font-size:17px;
-  margin-bottom:10px;
-}
-
-.card p{
-  color:#b9c7d8;
-  font-size:14px;
-}
-
-.number{
-  font-size:30px;
+label{
+  display:block;
+  margin-bottom:7px;
   font-weight:bold;
-  margin-bottom:5px;
+  color:#222;
 }
 
-.menu{
-  margin-top:25px;
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:15px;
-}
-
-.menu button{
-  background:#0d2342;
-  color:white;
-  border:1px solid #29415f;
-  padding:18px;
-  border-radius:12px;
-  text-align:left;
+input{
+  width:100%;
+  padding:14px;
+  border:1px solid #ccc;
+  border-radius:10px;
+  margin-bottom:18px;
   font-size:16px;
+}
+
+button{
+  width:100%;
+  padding:14px;
+  border:0;
+  border-radius:10px;
+  background:#07152b;
+  color:white;
+  font-size:17px;
+  font-weight:bold;
   cursor:pointer;
 }
 
-.menu button:hover{
-  background:#12345d;
+button:disabled{
+  opacity:.6;
 }
 
-.status{
-  margin-top:25px;
-  padding:15px;
-  background:#0d2342;
-  border-radius:12px;
-  color:#8ee6a7;
-}
-
-@media(max-width:700px){
-  .cards{
-    grid-template-columns:1fr;
-  }
-
-  .menu{
-    grid-template-columns:1fr;
-  }
-
-  .welcome h1{
-    font-size:24px;
-  }
+#message{
+  margin-top:15px;
+  text-align:center;
+  font-size:14px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="header">
-  <div class="logo">DEEPZ Admin Panel</div>
-  <button class="logout" onclick="logout()">Logout</button>
-</div>
+<div class="login-box">
 
-<div class="container">
+  <div class="logo">DEEPZ Admin</div>
 
-  <div class="welcome">
-    <h1>Admin Dashboard</h1>
-    <p id="adminEmail">Checking login...</p>
+  <div class="subtitle">
+    Secure Admin Login
   </div>
 
-  <div class="cards">
+  <label>Email</label>
+  <input
+    type="email"
+    id="email"
+    placeholder="Enter admin email"
+  >
 
-    <div class="card">
-      <div class="number">0</div>
-      <h3>Enquiries</h3>
-      <p>Customer booking enquiries</p>
-    </div>
+  <label>Password</label>
+  <input
+    type="password"
+    id="password"
+    placeholder="Enter password"
+  >
 
-    <div class="card">
-      <div class="number">96</div>
-      <h3>SEO Pages</h3>
-      <p>Website SEO landing pages</p>
-    </div>
+  <button id="loginButton" onclick="login()">
+    Login
+  </button>
 
-    <div class="card">
-      <div class="number">6</div>
-      <h3>Main Pages</h3>
-      <p>Home, About, Services and more</p>
-    </div>
-
-  </div>
-
-  <div class="menu">
-
-    <button onclick="alert('Enquiries section will be connected next.')">
-      📩 Enquiries
-    </button>
-
-    <button onclick="alert('Pages section will be connected next.')">
-      📄 Website Pages
-    </button>
-
-    <button onclick="alert('Vehicles section will be connected next.')">
-      🚕 Vehicles
-    </button>
-
-    <button onclick="alert('Destinations section will be connected next.')">
-      📍 Destinations
-    </button>
-
-    <button onclick="alert('SEO settings will be connected next.')">
-      🔍 SEO Settings
-    </button>
-
-    <button onclick="alert('Website settings will be connected next.')">
-      ⚙️ Website Settings
-    </button>
-
-  </div>
-
-  <div class="status">
-    ✓ Secure Supabase authentication active
-  </div>
+  <div id="message"></div>
 
 </div>
 
 <script>
 
-const SUPABASE_URL = "https://sbnyvlpsbxfyphmtxpor.supabase.co";
-const SUPABASE_KEY = "sb_publishable_FYHEtuDDiFFDejg7vKunqw_JhL17yTR";
+const SUPABASE_URL =
+"https://sbnyvlpsbxfyphmtxpor.supabase.co";
 
-const supabaseClient = window.supabase.createClient(
+const SUPABASE_KEY =
+"sb_publishable_FYHEtuDDiFFDejg7vKunqw_JhL17yTR";
+
+const supabaseClient =
+window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_KEY
 );
 
-async function checkLogin(){
+async function login(){
 
-  const { data, error } = await supabaseClient.auth.getUser();
+  const email =
+    document.getElementById("email").value.trim();
 
-  if(error || !data.user){
+  const password =
+    document.getElementById("password").value.trim();
 
-    window.location.href = "admin-login.html";
+  const message =
+    document.getElementById("message");
+
+  const button =
+    document.getElementById("loginButton");
+
+  if(!email || !password){
+
+    message.style.color = "red";
+    message.textContent =
+      "Please enter email and password.";
+
     return;
   }
 
-  document.getElementById("adminEmail").textContent =
-    "Logged in as: " + data.user.email;
+  button.disabled = true;
+  button.textContent = "Logging in...";
+
+  const { data, error } =
+    await supabaseClient.auth.signInWithPassword({
+      email: email,
+      password: password
+    });
+
+  if(error){
+
+    message.style.color = "red";
+    message.textContent = error.message;
+
+    button.disabled = false;
+    button.textContent = "Login";
+
+    return;
+  }
+
+  message.style.color = "green";
+  message.textContent = "Login successful...";
+
+  setTimeout(function(){
+
+    window.location.href =
+      "admin-dashboard.html";
+
+  },1000);
 }
-
-async function logout(){
-
-  await supabaseClient.auth.signOut();
-
-  window.location.href = "admin-login.html";
-}
-
-checkLogin();
 
 </script>
 
 </body>
-  </html>
+</html>
