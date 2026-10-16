@@ -542,7 +542,32 @@ footer{background:#06152a;color:#d9e0ea;text-align:center;padding:25px 18px;font
     height:190px !important;
   }
 }
-</style></head>
+</style>
+<style id="deepz-smaller-floating-buttons">
+/* Slightly smaller floating Call and WhatsApp buttons */
+.deepz-exact-call,
+.deepz-exact-whatsapp{
+  width:60px !important;
+  height:60px !important;
+}
+.deepz-exact-call{border-width:6px !important;}
+.deepz-exact-call svg{width:35px !important;height:35px !important;}
+.deepz-exact-whatsapp svg{width:38px !important;height:38px !important;}
+@media(max-width:600px){
+  .deepz-exact-call,
+  .deepz-exact-whatsapp{
+    width:56px !important;
+    height:56px !important;
+    bottom:76px !important;
+  }
+  .deepz-exact-call{left:24px !important;border-width:5px !important;}
+  .deepz-exact-whatsapp{right:24px !important;}
+  .deepz-exact-call svg{width:32px !important;height:32px !important;}
+  .deepz-exact-whatsapp svg{width:35px !important;height:35px !important;}
+}
+</style>
+
+</head>
 <body>
 <header>
 <div class="nav">
