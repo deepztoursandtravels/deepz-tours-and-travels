@@ -542,7 +542,32 @@ footer{background:#06152a;color:#d9e0ea;text-align:center;padding:25px 18px;font
     height:190px !important;
   }
 }
-</style></head>
+</style>
+<style id="deepz-smaller-floating-buttons">
+/* Slightly smaller floating Call and WhatsApp buttons */
+.deepz-exact-call,
+.deepz-exact-whatsapp{
+  width:60px !important;
+  height:60px !important;
+}
+.deepz-exact-call{border-width:6px !important;}
+.deepz-exact-call svg{width:35px !important;height:35px !important;}
+.deepz-exact-whatsapp svg{width:38px !important;height:38px !important;}
+@media(max-width:600px){
+  .deepz-exact-call,
+  .deepz-exact-whatsapp{
+    width:56px !important;
+    height:56px !important;
+    bottom:76px !important;
+  }
+  .deepz-exact-call{left:24px !important;border-width:5px !important;}
+  .deepz-exact-whatsapp{right:24px !important;}
+  .deepz-exact-call svg{width:32px !important;height:32px !important;}
+  .deepz-exact-whatsapp svg{width:35px !important;height:35px !important;}
+}
+</style>
+
+</head>
 <body>
 <header>
 <div class="nav">
@@ -867,9 +892,7 @@ async function deepzGetQuote(){
     "Trip Type: " + encodeURIComponent(trip);
   var whatsappUrl = 'https://wa.me/918722016756?text=' + message;
 
-  // Open a tab immediately so mobile browsers do not block WhatsApp after the save request.
-  var whatsappWindow = window.open('about:blank', '_blank');
-
+  // Redirect directly to WhatsApp after the booking save attempt to avoid opening a blank tab.
   var enquiry = {
     name: customerName,
     phone: customerPhone,
@@ -884,16 +907,16 @@ async function deepzGetQuote(){
     const { error } = await deepzSupabase.from('enquiries').insert([enquiry]);
     if (error) {
       console.error('DEEPZ booking save failed:', error);
-      if (whatsappWindow) whatsappWindow.location.href = whatsappUrl;
+      window.location.href = whatsappUrl;
       alert('Your WhatsApp enquiry will open, but the booking could not be saved to the Admin Dashboard. Please contact the website administrator. Error: ' + error.message);
       return;
     }
-    if (whatsappWindow) whatsappWindow.location.href = whatsappUrl;
+    window.location.href = whatsappUrl;
     else window.location.href = whatsappUrl;
     alert('Booking enquiry saved successfully. Please send the message in WhatsApp to confirm your request.');
   } catch (err) {
     console.error('DEEPZ booking save failed:', err);
-    if (whatsappWindow) whatsappWindow.location.href = whatsappUrl;
+    window.location.href = whatsappUrl;
     alert('Your WhatsApp enquiry will open, but the booking could not be saved to the Admin Dashboard. Please contact the website administrator.');
   }
 }
@@ -937,7 +960,7 @@ document.querySelectorAll('.navlinks a').forEach(function(link){
 <h2>Contact Us</h2>
 <p>📍 Tarikere, Chikkamagaluru, Karnataka</p>
 <p>📞 <a href="tel:+918722016756">+91 87220 16756</a></p>
-<p>💬 <a href="https://wa.me/918722016756" rel="noopener" target="_blank">WhatsApp</a></p>
+<p>💬 <a href="https://wa.me/918722016756?text=Hello%20DEEPZ%20Tour%27s%20and%20Travels%2C%20I%20want%20to%20book%20a%20trip." rel="noopener noreferrer" target="_blank">WhatsApp</a></p>
 <div class="deepz-social-row">
 <a aria-label="Facebook" href="#">f</a>
 <a aria-label="Twitter" href="#">♥</a>
@@ -981,7 +1004,7 @@ document.querySelectorAll('.navlinks a').forEach(function(link){
 <path d="M6.62 10.79a15.46 15.46 0 006.59 6.59l2.2-2.2a1.5 1.5 0 011.53-.36c.83.28 1.71.43 2.61.43a1.45 1.45 0 011.45 1.45V20a1.45 1.45 0 01-1.45 1.45C10.88 21.45 2.55 13.12 2.55 2.45A1.45 1.45 0 014 1h3.3a1.45 1.45 0 011.45 1.45c0 .9.15 1.78.43 2.61a1.5 1.5 0 01-.36 1.53l-2.2 2.2z"></path>
 </svg>
 </a>
-<a aria-label="WhatsApp DEEPZ" class="deepz-exact-whatsapp" href="https://wa.me/918722016756" rel="noopener" target="_blank">
+<a aria-label="WhatsApp DEEPZ" class="deepz-exact-whatsapp" href="https://wa.me/918722016756?text=Hello%20DEEPZ%20Tour%27s%20and%20Travels%2C%20I%20want%20to%20book%20a%20trip." rel="noopener noreferrer" target="_blank">
 <svg aria-hidden="true" viewbox="0 0 32 32">
 <path d="M16 3.2A12.7 12.7 0 005.1 22.4L3.6 28.2l6-1.5A12.8 12.8 0 1016 3.2zm0 23.2a10.4 10.4 0 01-5.3-1.45l-.38-.22-3.55.9.93-3.45-.25-.4A10.4 10.4 0 1116 26.4zm5.72-7.8c-.31-.16-1.84-.91-2.13-1.01-.29-.11-.5-.16-.71.16-.21.31-.81 1.01-.99 1.22-.18.21-.36.23-.67.08-.31-.16-1.31-.48-2.5-1.54-.92-.82-1.54-1.83-1.72-2.14-.18-.31-.02-.48.14-.64.14-.14.31-.36.47-.54.16-.18.21-.31.31-.52.1-.21.05-.39-.03-.54-.08-.16-.71-1.71-.97-2.34-.25-.61-.51-.53-.71-.54h-.6c-.21 0-.55.08-.84.39-.29.31-1.1 1.08-1.1 2.64s1.13 3.06 1.29 3.27c.16.21 2.22 3.39 5.38 4.75.75.32 1.34.51 1.8.65.76.24 1.45.21 2 .13.61-.09 1.84-.75 2.1-1.48.26-.73.26-1.35.18-1.48-.08-.13-.29-.21-.6-.36z"></path>
 </svg>
