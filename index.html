@@ -9,6 +9,19 @@
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
   gtag('config', 'AW-184984656945');
+  gtag('config', 'AW-18498656945');
+</script>
+<script>
+// Google Ads Request quote (1) conversion. Fired only after the quote form passes validation.
+function reportRequestQuoteConversion() {
+  if (typeof gtag === 'function') {
+    gtag('event', 'conversion', {
+      'send_to': 'AW-18498656945/loWPCNHywaEdELG17PRE',
+      'value': 1.0,
+      'currency': 'INR'
+    });
+  }
+}
 </script>
 
 <meta charset="utf-8"/>
@@ -892,6 +905,9 @@ async function deepzGetQuote(){
     "Trip Type: " + encodeURIComponent(trip);
   var whatsappUrl = 'https://wa.me/918722016756?text=' + message;
 
+  // Count a Request quote conversion only after required booking fields are valid.
+  reportRequestQuoteConversion();
+
   // Redirect directly to WhatsApp after the booking save attempt to avoid opening a blank tab.
   var enquiry = {
     name: customerName,
@@ -912,7 +928,6 @@ async function deepzGetQuote(){
       return;
     }
     window.location.href = whatsappUrl;
-    else window.location.href = whatsappUrl;
     alert('Booking enquiry saved successfully. Please send the message in WhatsApp to confirm your request.');
   } catch (err) {
     console.error('DEEPZ booking save failed:', err);
